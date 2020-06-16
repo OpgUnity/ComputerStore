@@ -3,9 +3,9 @@
 const {Pool} = require("pg");
 
 let pool = new Pool({
-    host: "localhost",
-    port: 3001,
-    user: "computer_store_admin",
+    host: "pg2.sweb.ru",
+    port: 5432,
+    user: "ibseroshin",
     password: "",
     database: "",
     max: 20,
@@ -48,11 +48,11 @@ const bodyNormalisator = body => ({
 
 
 const createPool = (userData) => new Pool({
-    host: "localhost",
-    port: 3001,
+    host: "pg2.sweb.ru",
+    port: 5432,
     user: userData.user,
     password: userData.password,
-    database: "computer_store",
+    database: "ibseroshin",
     max: 20,
     connectionTimeoutMillis: 0,
     idleTimeoutMillis: 0
