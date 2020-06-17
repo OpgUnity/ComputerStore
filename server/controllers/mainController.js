@@ -46,7 +46,6 @@ const bodyNormalisator = body => ({
     condition_description: body.condition_description
 })
 
-
 const createPool = (userData) => new Pool({
     host: "pg2.sweb.ru",
     port: 5432,
