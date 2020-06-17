@@ -2,12 +2,14 @@
 
 const {Pool} = require("pg");
 
-let pool = new Pool({
+let pool;
+
+const createPool = (userData) => new Pool({
     host: "pg2.sweb.ru",
     port: 5432,
-    user: "ibseroshin",
-    password: "",
-    database: "",
+    user: userData.user,
+    password: userData.password,
+    database: "ibseroshin",
     max: 20,
     connectionTimeoutMillis: 0,
     idleTimeoutMillis: 0
@@ -45,18 +47,6 @@ const bodyNormalisator = body => ({
     condition_name: body.condition_name,
     condition_description: body.condition_description
 })
-
-
-const createPool = (userData) => new Pool({
-    host: "pg2.sweb.ru",
-    port: 5432,
-    user: userData.user,
-    password: userData.password,
-    database: "ibseroshin",
-    max: 20,
-    connectionTimeoutMillis: 0,
-    idleTimeoutMillis: 0
-});
 
 exports.get = async (req, res) =>
     selectQuery()
