@@ -48,7 +48,6 @@ const bodyNormalisator = body => ({
     condition_description: body.condition_description
 })
 
-
 exports.get = async (req, res) =>
     selectQuery()
         .then(results => {
