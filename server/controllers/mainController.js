@@ -1,15 +1,16 @@
 'use strict';
 
 const {Pool} = require("pg");
+const {userName, password, dbName} = require("../../secret");
 
 let pool;
 
-const createPool = (userData) => new Pool({
+const createPool = () => new Pool({
     host: "pg2.sweb.ru",
     port: 5432,
-    user: userData.user,
-    password: userData.password,
-    database: "ibseroshin",
+    user: userName,
+    password: password,
+    database: dbName,
     max: 20,
     connectionTimeoutMillis: 0,
     idleTimeoutMillis: 0
