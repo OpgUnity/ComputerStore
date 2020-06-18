@@ -7,6 +7,7 @@ module.exports = function (app) {
     app.route('/login')
         .post(mainController.login);
 
+
     app.route('/conditions')
         .get(mainController.get)
         .put(mainController.put)
