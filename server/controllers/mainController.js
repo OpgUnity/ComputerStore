@@ -1,19 +1,22 @@
 'use strict';
 
 const {Pool} = require("pg");
+const {userName, password, dbName, host, port} = require("../../secret");
 
-let pool = new Pool({
-    host: "localhost",
-    port: 3001,
-    user: "computer_store_admin",
-    password: "",
-    database: "",
+let pool;
+
+const createPool = () => new Pool({
+    host: host,
+    port: port,
+    user: userName,
+    password: password,
+    database: dbName,
     max: 20,
     connectionTimeoutMillis: 0,
     idleTimeoutMillis: 0
 });
 
-const uuidv4 = () => {
+const uuidv4 = () => { // Ваня сказал не трогать и не вникать в суть, потому что он сам не знает
     return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
         var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
         return v.toString(16);
@@ -45,18 +48,6 @@ const bodyNormalisator = body => ({
     condition_name: body.condition_name,
     condition_description: body.condition_description
 })
-
-
-const createPool = (userData) => new Pool({
-    host: "localhost",
-    port: 3001,
-    user: userData.user,
-    password: userData.password,
-    database: "computer_store",
-    max: 20,
-    connectionTimeoutMillis: 0,
-    idleTimeoutMillis: 0
-});
 
 exports.get = async (req, res) =>
     selectQuery()
