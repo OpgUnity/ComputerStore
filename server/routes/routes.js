@@ -7,14 +7,15 @@ module.exports = function (app) {
 
     let conditionsController = require('../controllers/conditionsController');
     let salesController = require('../controllers/salesController');
-    let salesProductsController = require('../controllers/salesProductsController');
     let productCategoryController = require('../controllers/productCategoryController');
     let order_statesController = require('../controllers/order_statesController');
     let ordersController = require('../controllers/ordersController');
     let warehouseController = require('../controllers/warehouseController');
+    let salesProductsController = require('../controllers/salesProductsController');
     let productCategoryController = require('../controllers/productCategoryController');
     let productsController = require('../controllers/productsController');
     let manufacturersController = require('../controllers/manufacturersController');
+
     app.route('/login')
         .post(conditionsController.login);
 
@@ -77,12 +78,6 @@ module.exports = function (app) {
     app.route('/product_category/:id')
         .delete(productCategoryController.delete);
 
-    app.route('/products/:id')
-        .delete(productsController.delete);
-
-    app.route('/sales_products/:id')
-        .delete(salesProductsController.delete)
-
     app.route('/order_states/:id')
         .delete(order_statesController.delete)
 
@@ -97,9 +92,8 @@ module.exports = function (app) {
         .get(salesProductsController.get)
         .put(salesProductsController.put)
         .post(salesProductsController.update);
-
-    app.route('/sales_products/:id')
-        .delete(salesProductsController.delete)
+    app.route('/products/:id')
+        .delete(productsController.delete);
 
     app.route('/manufacturers/:id')
         .delete(manufacturersController.delete);
