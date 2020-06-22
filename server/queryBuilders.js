@@ -19,12 +19,13 @@ exports.selectQueryBuilder = (tableName, fields = '*') =>
  * @returns {string}
  */
 exports.appendWhere = (selectQueryText, conditions = []) =>
-    typeof conditions === 'string' || conditions instanceof Array?
-        `${selectQueryText} WHERE ${Object.values(conditions).join(' ')}` :
-        new Error( "Неверный тип аргумента");
+    conditions instanceof Array?
+        `${selectQueryText} WHERE ${conditions.join(' ')}` :
+        typeof conditions === "string"?
+            `${selectQueryText} WHERE ${conditions}` :
+            new Error( "Неверный тип аргумента");
 
 /**
- *
  * @param selectQueryText {string}
  * @param orders {({Object[]}|{Object}|string)}
  * @returns {string}
