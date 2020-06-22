@@ -2,7 +2,7 @@
 
 //подключаем ништяки
 const {selectQueryBuilder, appendWhere, appendOrderBy} = require('../queryBuilders');
-const {query} = require ('../connection')
+const {query} = require('../connection')
 const {bodyNormalizator, ASC, DESC} = require('../utils');
 
 //формирование строки запроса на выборку из таблицы с состояниями товара
@@ -116,11 +116,11 @@ exports.update = async (req, res) =>
 
 
 exports.login = async (req, res) => {
-            res.json({
-                success: true,
-                body: {
-                    sessionKey: 1
-                }
-            })
+    res.json({
+        success: true,
+        body: {
+            sessionKey: 1
+        }
+    })
 
 }
