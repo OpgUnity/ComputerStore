@@ -6,8 +6,8 @@ const {query} = require('../connection')
 const {bodyNormalizator, ASC, DESC} = require('../utils');
 
 //формирование строки запроса на выборку из таблицы с состояниями товара
-let selectQueryText = selectQueryBuilder('store.sales');
-selectQueryText = appendOrderBy(selectQueryText, {payment_amount: ASC});
+let selectQueryText = selectQueryBuilder('store.sales_products');
+selectQueryText = appendOrderBy(selectQueryText, {product_id: ASC});
 
 //функция, которая реализует один из методов HTTP - запроса
 exports.get = async (req, res) =>
@@ -47,7 +47,7 @@ exports.get = async (req, res) =>
 
 exports.put = async (req, res) => {
     console.log(req.body)
-    query("INSERT INTO store.sales (payment_amount, discount) VALUES ($1, $2)", req.body)
+    query("INSERT INTO store.sales_products (sale_id, product_id, product_count) VALUES ($1, $2, $3)", req.body)
         .then(result =>
             res.json({
                 success: true
@@ -64,7 +64,7 @@ exports.put = async (req, res) => {
 
 exports.delete = async (req, res) => {
     console.log(req.params)
-    query("DELETE FROM store.sales where sale_id = $1", req.params)
+    query("DELETE FROM store.sales_products where sale_id = $1", req.params)
         .then(result =>
             res.json({
                 success: true
@@ -81,7 +81,7 @@ exports.delete = async (req, res) => {
 
 exports.update = async (req, res) => {
     console.log(req.body)
-    query("UPDATE store.sales SET payment_amount = $2, discount = $3 WHERE sale_id = $1", req.body)
+    query("UPDATE store.sales_products SET sale_id = $2, product_id = $3, product_count = $4 WHERE sale_id = $1", req.body)
         .then(result =>
             res.json({
                 success: true,

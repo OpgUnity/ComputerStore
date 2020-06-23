@@ -8,6 +8,8 @@ module.exports = function (app) {
     let conditionsController = require('../controllers/conditionsController');
     let salesController = require('../controllers/salesController');
     let productCategoryController = require('../controllers/productCategoryController');
+    let salesProductsController = require('../controllers/salesProductsController');
+
 
     app.route('/login')
         .post(conditionsController.login);
@@ -37,6 +39,14 @@ module.exports = function (app) {
 
     app.route('/product_category/:id')
         .delete(productCategoryController.delete);
+
+    app.route('/sales_products')
+        .get(salesProductsController.get)
+        .put(salesProductsController.put)
+        .post(salesProductsController.update);
+
+    app.route('/sales_products/:id')
+        .delete(salesProductsController.delete)
 
     //Если мы исползьуем делит, то можем в адресной строке сказать, какой ид нужно удалить
     //URL выглядит так:http://localhost:3002/conditions/1 с методом DELETE
