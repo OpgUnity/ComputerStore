@@ -56,6 +56,10 @@ exports.put = async (req, res) => {
         .catch(err => {
                 console.error(err);
                 res.json({
+                    body:{
+                        codeError: err.code,
+                        description: err.description
+                    },
                     success: false
                 })
             }
