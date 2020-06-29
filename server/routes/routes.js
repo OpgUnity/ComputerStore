@@ -12,7 +12,6 @@ module.exports = function (app) {
     let order_statesController = require('../controllers/order_statesController');
     let ordersController = require('../controllers/ordersController');
     let warehouseController = require('../controllers/warehouseController');
-    let salesProductsController = require('../controllers/salesProductsController');
 
     app.route('/login')
         .post(conditionsController.login);
