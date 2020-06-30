@@ -8,6 +8,7 @@ import AddForm from "./components/AddForm";
 import LoginForm from "./components/LoginForm";
 import EditForm from "./components/EditForm";
 import States from "./pages/states";
+import ProductCategory from "./pages/ProductCategory";
 
 
 export const App = ({rows, rowNames, edit, rowData, closeForm, logged, reason}) => {
@@ -16,29 +17,35 @@ export const App = ({rows, rowNames, edit, rowData, closeForm, logged, reason}) 
         handleUpdate(values)
     }
     return (
-        <div>{
-            !logged ?
-                <>
-                    {
-                        reason === 'auth_failed' &&
-                        <span style={{color: 'red'}}>Неверное имя пользователя и/или пароль</span>
-                    }
-                    <LoginForm onSubmit={values => handleLogin(values)}/>
-                </>
-                :
-                <>
-                    <Button label='Выйти' onClick={() => window.location.reload()}/>
-                    <Button onClick={handleRead} label='Открыть таблицу'/>
-                    {
-                        rows &&
-                        <>
-                            <AddForm onSubmit={values => handleCreate(values)}/>
-                            <States data={rows} captions={rowNames}/>
-                        </>
-                    }
-                    {edit && <EditForm row={rowData} onSubmit={handleSubmit}/>}
-                </>
-        }
+        <div>
+            {
+                // !logged ?
+                //     <>
+                //         {
+                //             reason === 'auth_failed' &&
+                //             <span style={{color: 'red'}}>Неверное имя пользователя и/или пароль</span>
+                //         }
+                //         <LoginForm onSubmit={values => handleLogin(values)}/>
+                //     </>
+                //     :
+                //     <>
+                //         <Button label='Выйти' onClick={() => window.location.reload()}/>
+                //         <Button onClick={handleRead} label='Открыть таблицу'/>
+                //         {
+                //             rows &&
+                //             <>
+                //                 <AddForm onSubmit={values => handleCreate(values)}/>
+                //                 <States data={rows} captions={rowNames}/>
+                //             </>
+                //         }
+                //         {edit && <EditForm row={rowData} onSubmit={handleSubmit}/>}
+                //     </>
+
+            }
+            <ProductCategory/>
+
+
+
         </div>
     )
 }

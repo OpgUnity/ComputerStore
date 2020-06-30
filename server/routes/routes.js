@@ -13,7 +13,7 @@ module.exports = function (app) {
     let salesProductsController = require('../controllers/salesProductsController');
     let productCategoryController = require('../controllers/productCategoryController');
     let productsController = require('../controllers/productsController');
-    let manufacturersController = require('../controllers/manufacturerController');
+    let manufacturersController = require('../controllers/manufacturersController');
 
     app.route('/login')
         .post(conditionsController.login);

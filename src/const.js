@@ -1,11 +1,23 @@
 import {deleteAction, getAction, login, putAction} from "./actions";
 
-export const SERVER = 'http://localhost:3002/';
-export const CONDITION_PATHNAME = 'conditions';
-export const LOGIN_PATHNAME = 'login';
+export const SERVER = 'http://localhost:3002';
+export const CONDITION_PATHNAME = '/conditions';
+export const LOGIN_PATHNAME = '/login';
+export const PRODUCT_CATEGORY_PATHNAME='/product_category'
+export const SALES_PATHNAME='/sales'
+export const ORDER_STATES_PATHNAME='/order_states'
+export const ORDERS_PATHNAME='/orders'
+export const WAREHOUSE_PATHNAME='/warehouse'
+export const PRODUCTS_PATHNAME='/products'
+export const MANUFACTURERS_PATHNAME='/manufacturers'
+export const SALES_PRODUCTS_PATHNAME='/sales_products'
 
-export const handleRead = () => {
-    fetch(`${SERVER}${CONDITION_PATHNAME}`)
+
+
+
+export const handleRead = (pathname) =>
+{
+    fetch(`${SERVER}${pathname}`)
         .then(res => res.json())
         .then(res =>
             res.success ?
@@ -19,8 +31,8 @@ export const handleRead = () => {
 }
 
 
-export const handleCreate = (item) => {
-    fetch(`${SERVER}${CONDITION_PATHNAME}`,
+export const handleCreate = (item,pathname) => {
+    fetch(`${SERVER}${pathname}`,
         {
             method: 'PUT',
             headers: {'Content-Type': 'application/json',},
@@ -38,8 +50,8 @@ export const handleCreate = (item) => {
         })
         .catch(err => alert(err))
 }
-export const handleUpdate = (value) => {
-    fetch(`${SERVER}${CONDITION_PATHNAME}`, {
+export const handleUpdate = (value,pathname) => {
+    fetch(`${SERVER}${pathname}`, {
         method: 'POST',
         headers: {'Content-Type': 'application/json',},
         body: JSON.stringify(value)
@@ -51,8 +63,8 @@ export const handleUpdate = (value) => {
                 Promise.reject('error due server request'))
         .catch(err => alert(err))
 }
-export const handleDelete = (id) => {
-    fetch(`${SERVER}${CONDITION_PATHNAME}/${id}`,
+export const handleDelete = (id,pathname) => {
+    fetch(`${SERVER}${pathname}/${id}`,
         {method: 'delete'}
     )
         .then(res => res.json())
@@ -67,8 +79,8 @@ export const handleDelete = (id) => {
         .catch(err => alert(err))
 }
 
-export const handleLogin = userData => {
-    fetch(`${SERVER}${LOGIN_PATHNAME}`,
+export const handleLogin = (userData,pathname) => {
+    fetch(`${SERVER}${pathname}`,
         {
             method: 'POST',
             headers: {'Content-Type': 'application/json',},
