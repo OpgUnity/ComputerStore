@@ -9,7 +9,8 @@ import LoginForm from "./components/LoginForm";
 import EditForm from "./components/EditForm";
 import States from "./pages/states";
 import ProductCategory from "./pages/ProductCategory";
-
+import Container from '@material-ui/core/Container';
+import {PrintTable, tables} from "./components/SelectTable";
 
 export const App = ({rows, rowNames, edit, rowData, closeForm, logged, reason}) => {
     const handleSubmit = values => {
@@ -17,7 +18,7 @@ export const App = ({rows, rowNames, edit, rowData, closeForm, logged, reason}) 
         handleUpdate(values)
     }
     return (
-        <div>
+        <Container maxWidth="md">
             {
                 // !logged ?
                 //     <>
@@ -42,11 +43,11 @@ export const App = ({rows, rowNames, edit, rowData, closeForm, logged, reason}) 
                 //     </>
 
             }
-            <ProductCategory/>
+            <PrintTable table={tables} />
 
 
 
-        </div>
+        </Container>
     )
 }
 

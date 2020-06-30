@@ -1,9 +1,12 @@
 'use strict';
 
 //подключаем ништяки
+
+
 const {selectQueryBuilder, appendWhere, appendOrderBy} = require('../queryBuilders');
 const {query} = require('../connection')
-const {bodyNormalizator, ASC, DESC} = require('../utils');
+const {bodyNormalizator, ASC, DESC, responseBuilder} = require('../utils');
+
 
 //формирование строки запроса на выборку из таблицы с состояниями товара
 let selectQueryText = selectQueryBuilder('store.product_category');
@@ -14,17 +17,11 @@ exports.get = async (req, res) =>
     //1.делаем запрос на выборку с помощью ранее сформированной строки
     query(selectQueryText)
         .then(results => {
-            //2.при успешной отработке в этом блоке берём данные
-            var response = {
-                success: true,
-                body: {
-                    rows: results.rows,
-                    rowNames: results.fields.map(item => item.name)
-                }
-            }
             //3.Отправляем их клиенту в формате .json
-            res.json(response);
+            res.json(responseBuilder(results, true));
+            console.log(results)
         })
+
         .catch(err => {
             //4. Если у нас что-то сломалось, то выводим в консоль на сервере ошибку
             console.error(err);
@@ -42,11 +39,10 @@ exports.get = async (req, res) =>
 exports.put = async (req, res) => {
     console.log(req.body)
     query("insert into store.product_category (category_name, category_description) values ($1, $2)", req.body)
-        .then(result =>
-            res.json({
-                success: true
-            })
-        )
+        .then(results => {
+            //3.Отправляем их клиенту в формате .json
+            res.json(responseBuilder(results, true));
+        })
         .catch(err => {
                 console.error(err);
                 res.json({
@@ -59,11 +55,10 @@ exports.put = async (req, res) => {
 exports.delete = async (req, res) => {
     console.log(req.params)
     query("delete from store.product_category where category_id = $1", req.params)
-        .then(result =>
-            res.json({
-                success: true
-            })
-        )
+        .then(results => {
+            //3.Отправляем их клиенту в формате .json
+            res.json(responseBuilder(results, true));
+        })
         .catch(err => {
                 console.error(err);
                 res.json({
@@ -76,11 +71,10 @@ exports.delete = async (req, res) => {
 exports.update = async (req, res) => {
     console.log(req.body)
     query("update store.product_category set category_name = $2, category_description = $3 where category_id = $1", req.body)
-        .then(result =>
-            res.json({
-                success: true
-            })
-        )
+        .then(results => {
+            //3.Отправляем их клиенту в формате .json
+            res.json(responseBuilder(results, true));
+        })
         .catch(err => {
                 console.error(err);
                 res.json({

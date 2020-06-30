@@ -20,6 +20,7 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Switch from '@material-ui/core/Switch';
 import DeleteIcon from '@material-ui/icons/Delete';
 import FilterListIcon from '@material-ui/icons/FilterList';
+import Grid from "@material-ui/core/Grid";
 
 
 /**
@@ -54,7 +55,7 @@ function EnhancedTableHead(props) {
                 {columnNames.map((columnName) => (
                     <TableCell
                         key={columnName}
-                        align={'right'}
+                        align={'center'}
                         padding={'default'}
                         sortDirection={orderBy === columnName ? order : false}
                     >
@@ -114,9 +115,6 @@ const EnhancedTableToolbar = ({numSelected, classes, handleDelete}) => {
                 {numSelected ? `${numSelected} Выбрано` : null}
             </Typography>
 
-            <Typography className={classes.title} variant="h6" id="tableTitle" component="div">
-                Здесь название таблицы
-            </Typography>
             {
                 numSelected ?
                     <Tooltip title="Удалить выбранные элементы">
@@ -224,6 +222,18 @@ export const EnhancedTable = ({columnNames, rows}) => {
     return (
         <div className={classes.root}>
             <Paper className={classes.paper}>
+                <Grid container
+                      direction="column"
+                      justify="space-around"
+                      alignItems="center"
+                      spacing={5}>
+                    <Grid item/>
+                    <Grid item> <Typography variant="h6" id="tableTitle" component="div" align={"center"}>
+                        Здесь название таблицы
+                    </Typography>
+                    </Grid>
+
+                </Grid>
                 <EnhancedTableToolbar numSelected={selected.length} classes={useToolbarStyles()}/>
                 <TableContainer>
                     <Table
@@ -265,7 +275,7 @@ export const EnhancedTable = ({columnNames, rows}) => {
                                             </TableCell>
                                             {
                                                 columnNames.map(columnName =>
-                                                    <TableCell align="right" key={columnName}>
+                                                    <TableCell align="center" key={columnName}>
                                                         {row[columnName]}
                                                     </TableCell>
                                                 )

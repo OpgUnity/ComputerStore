@@ -14,7 +14,7 @@ export const tableReducer = (state = initialData, action) => {
             return {
                 ...state,
                 rows: action.payload.rows,
-                rowNames: action.payload.rowNames
+                fields: action.payload.fields
             }
         }
         case START_EIDT: {

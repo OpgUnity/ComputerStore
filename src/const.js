@@ -23,7 +23,7 @@ export const handleRead = (pathname) =>
             res.success ?
                 window.store.dispatch(getAction({
                     rows: res.body.rows,
-                    rowNames: res.body.rowNames,
+                    fields: res.body.fields,
                 })) :
                 Promise.reject('error due server request')
         )

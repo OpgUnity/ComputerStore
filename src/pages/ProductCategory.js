@@ -14,13 +14,13 @@ const ProductCategory = ({columns, rows}) =>
             },
         })}>
             {rows && <EnhancedTable columnNames={columns} rows={rows}/>}
-            <Button variant="contained" onClick={() => handleRead(PRODUCT_CATEGORY_PATHNAME)}>Default</Button>
+            <Button variant="contained" onClick={() => handleRead(PRODUCT_CATEGORY_PATHNAME)}>Открыть таблицу</Button>
 
         </ThemeProvider>
     </>
 
 const mapStateToProps = (state) => ({
-    columns: state.table.rowNames,
+    columns: state.table.fields,
     rows: state.table.rows
 })
 
