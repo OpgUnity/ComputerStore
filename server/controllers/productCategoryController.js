@@ -15,16 +15,11 @@ exports.get = async (req, res) =>
     query(selectQueryText)
         .then(results => {
             //2.при успешной отработке в этом блоке берём данные
-            var rows = [];
-            if (results.rows.length > 0 && results.rows)
-                rows = results.rows.map(row => ({id: row.category_id, ...row}))
+
             var response = {
                 success: true,
                 body: {
-                    rows: rows.map(row => {
-                        delete row.category_id;
-                        return row
-                    }),
+                    rows: results.rows,
                     rowNames: results.fields.map(item => item.name)
                 }
             }
