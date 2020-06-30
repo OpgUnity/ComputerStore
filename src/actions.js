@@ -6,11 +6,11 @@ export const START_EIDT = "START_EIDT";
 export const END_EDIT = "END_EDIT";
 export const LOGIN = "LOGIN";
 
-export const getAction = ({rows, rowNames}) => ({
+export const getAction = ({rows, fields}) => ({
     type: GET_ACTION,
     payload: {
         rows,
-        rowNames,
+        fields,
     }
 })
 export const postAction = payload => ({
