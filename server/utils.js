@@ -7,7 +7,7 @@ exports.uuidv4 = () => { // Ваня сказал не трогать и не в
 }
 
 //функция-нормализатор тела ответа
-exports.bodyNormalisator = body => ({
+exports.bodyNormalizator = body => ({
     condition_name: body.condition_name,
     condition_description: body.condition_description
 })

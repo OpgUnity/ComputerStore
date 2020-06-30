@@ -9,9 +9,9 @@ exports.selectQueryBuilder = (tableName, fields = '*') =>
         `select ${fields instanceof Array ?
             fields.join(', ') :
             fields
-            } from ${tableName}` :
+        } from ${tableName}` :
 
-        new Error( "Неверный тип аргумента");
+        new Error("Неверный тип аргумента");
 /**
  *
  * @param selectQueryText {string}
@@ -19,20 +19,24 @@ exports.selectQueryBuilder = (tableName, fields = '*') =>
  * @returns {string}
  */
 exports.appendWhere = (selectQueryText, conditions = []) =>
-    typeof conditions === 'string' || conditions instanceof Array?
-        `${selectQueryText} WHERE ${Object.values(conditions).join(' ')}` :
-        new Error( "Неверный тип аргумента");
+    conditions instanceof Array ?
+        `${selectQueryText} WHERE ${conditions.join(' ')}` :
+        typeof conditions === "string" ?
+            `${selectQueryText} WHERE ${conditions}` :
+            new Error("Неверный тип аргумента");
 
 /**
- *
  * @param selectQueryText {string}
  * @param orders {({Object[]}|{Object}|string)}
  * @returns {string}
  */
 exports.appendOrderBy = (selectQueryText, orders) =>
     orders && orders instanceof Array ?
-        `${selectQueryText}
-        ORDER BY ${orders.map(order => Object.entries(order)[0].join(' ')).join(', ')}` :
+        `${selectQueryText} ORDER BY ${orders
+            .map(order => Object.entries(order)[0]
+                .join(' '))
+            .join(', ')
+        }` :
         orders instanceof Object ?
             `${selectQueryText} ORDER BY ${Object.entries(orders)[0].join(' ')}` :
             typeof orders === 'string' ?

@@ -6,8 +6,8 @@ const {query} = require('../connection')
 const {bodyNormalizator, ASC, DESC} = require('../utils');
 
 //формирование строки запроса на выборку из таблицы с состояниями товара
-let selectQueryText = selectQueryBuilder('store.product_category');
-selectQueryText = appendOrderBy(selectQueryText, {category_name: ASC});
+let selectQueryText = selectQueryBuilder('store.orders');
+selectQueryText = appendOrderBy(selectQueryText, {total_amount: ASC});
 
 //функция, которая реализует один из методов HTTP - запроса
 exports.get = async (req, res) =>
@@ -15,10 +15,16 @@ exports.get = async (req, res) =>
     query(selectQueryText)
         .then(results => {
             //2.при успешной отработке в этом блоке берём данные
+            var rows = [];
+            if (results.rows.length > 0 && results.rows)
+                rows = results.rows.map(row => ({id: row.order_id, ...row}))
             var response = {
                 success: true,
                 body: {
-                    rows: results.rows,
+                    rows: rows.map(row => {
+                        delete row.order_id;
+                        return row
+                    }),
                     rowNames: results.fields.map(item => item.name)
                 }
             }
@@ -41,7 +47,7 @@ exports.get = async (req, res) =>
 
 exports.put = async (req, res) => {
     console.log(req.body)
-    query("insert into store.product_category (category_name, category_description) values ($1, $2)", req.body)
+    query("INSERT INTO store.orders (total_amount, state_id, product_id) VALUES ($1, $2, $3)", req.body)
         .then(result =>
             res.json({
                 success: true
@@ -58,7 +64,7 @@ exports.put = async (req, res) => {
 
 exports.delete = async (req, res) => {
     console.log(req.params)
-    query("delete from store.product_category where category_id = $1", req.params)
+    query("DELETE FROM store.orders where order_id = $1", req.params)
         .then(result =>
             res.json({
                 success: true
@@ -75,7 +81,7 @@ exports.delete = async (req, res) => {
 
 exports.update = async (req, res) => {
     console.log(req.body)
-    query("update store.product_category set category_name = $2, category_description = $3 where category_id = $1", req.body)
+    query("UPDATE store.orders SET total_amount = $2 WHERE order_id = $1", req.body)
         .then(result =>
             res.json({
                 success: true

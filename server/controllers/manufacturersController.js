@@ -6,8 +6,8 @@ const {query} = require('../connection')
 const {bodyNormalizator, ASC, DESC} = require('../utils');
 
 //формирование строки запроса на выборку из таблицы с состояниями товара
-let selectQueryText = selectQueryBuilder('store.product_category');
-selectQueryText = appendOrderBy(selectQueryText, {category_name: ASC});
+let selectQueryText = selectQueryBuilder('store.manufacturers');
+selectQueryText = appendOrderBy(selectQueryText, {manufacturer_name: ASC});
 
 //функция, которая реализует один из методов HTTP - запроса
 exports.get = async (req, res) =>
@@ -15,10 +15,16 @@ exports.get = async (req, res) =>
     query(selectQueryText)
         .then(results => {
             //2.при успешной отработке в этом блоке берём данные
+            var rows = [];
+            if (results.rows.length > 0 && results.rows)
+                rows = results.rows.map(row => ({id: row.manufacturer_id, ...row}))
             var response = {
                 success: true,
                 body: {
-                    rows: results.rows,
+                    rows: rows.map(row => {
+                        delete row.manufacturer_id;
+                        return row
+                    }),
                     rowNames: results.fields.map(item => item.name)
                 }
             }
@@ -41,7 +47,7 @@ exports.get = async (req, res) =>
 
 exports.put = async (req, res) => {
     console.log(req.body)
-    query("insert into store.product_category (category_name, category_description) values ($1, $2)", req.body)
+    query("insert into store.manufacturers (manufacturer_name, manufacturer_contacts) values ($1, $2)", req.body)
         .then(result =>
             res.json({
                 success: true
@@ -58,7 +64,7 @@ exports.put = async (req, res) => {
 
 exports.delete = async (req, res) => {
     console.log(req.params)
-    query("delete from store.product_category where category_id = $1", req.params)
+    query("delete from store.manufacturers where manufacturer_id = $1", req.params)
         .then(result =>
             res.json({
                 success: true
@@ -75,7 +81,7 @@ exports.delete = async (req, res) => {
 
 exports.update = async (req, res) => {
     console.log(req.body)
-    query("update store.product_category set category_name = $2, category_description = $3 where category_id = $1", req.body)
+    query("update store.manufacturers set manufacturer_name = $2, manufacturer_contacts = $3 where manufacturer_id = $1", req.body)
         .then(result =>
             res.json({
                 success: true
