@@ -6,7 +6,7 @@ const useStyles = makeStyles((theme) => ({
     root: {
         '& .MuiTextField-root': {
             margin: theme.spacing(5),
-            width: '25ch',
+            width: '50ch',
             display: 'block'
 
         },
@@ -24,6 +24,7 @@ export const FormProductCategory = () => {
                     id="outlined-required"
                     label="Required"
                     defaultValue=""
+                    fullWidth={true}
                     variant="outlined"
                     helperText="Название категории"
                 />
@@ -33,6 +34,7 @@ export const FormProductCategory = () => {
                     id="outlined-required"
                     label="Required"
                     defaultValue=""
+                    fullWidth={true}
                     variant="outlined"
                     helperText="Описание категории"
                 />

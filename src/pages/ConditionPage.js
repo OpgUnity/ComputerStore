@@ -34,6 +34,7 @@ export const FormCondition = () => {
                     id="outlined-required"
                     label="Required"
                     defaultValue=""
+                    fullWidth={true}
                     variant="outlined"
                     helperText="Описание состояния"
                 />
