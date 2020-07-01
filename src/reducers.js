@@ -1,15 +1,44 @@
-import {DELETE_ACTION, END_EDIT, GET_ACTION, LOGIN, POST_ACTION, PUT_ACTION, START_EIDT} from "./actions";
+import {
+    CHANGE_TABLE_STATE,
+    DELETE_ACTION,
+    END_EDIT,
+    GET_ACTION,
+    LOGIN,
+    POST_ACTION,
+    PUT_ACTION,
+    SORT_ROWS,
+    START_EIDT
+} from "./actions";
 
 const initialData ={
+    tableState: {
+        order: null,
+        orderBy: 'asc',
+        selected: [],
+        page: 0,
+        rowsPerPage: 5,
+        dense: false
+    },
     rows: null,
     rowNames: null,
     edit: false,
     logged: false
 };
 
-
 export const tableReducer = (state = initialData, action) => {
     switch (action.type) {
+        case SORT_ROWS: {
+            return {
+                ...state,
+                rows: action.payload
+            }
+        }
+        case CHANGE_TABLE_STATE: {
+            return {
+                ...state,
+                tableState: action.payload
+            }
+        }
         case GET_ACTION: {
             return {
                 ...state,
