@@ -22,6 +22,7 @@ import {
 import DeleteIcon from '@material-ui/icons/Delete';
 import {changeTableStateAction, sortRowsAction} from "../actions";
 import {connect} from "react-redux";
+import Grid from "@material-ui/core/Grid";
 
 /**
  * Сортирует массив строк
@@ -48,7 +49,6 @@ function EnhancedTableHead({classes, selectAll, order, orderBy, numSelected, row
                         onChange={selectAll}
                     />
                 </TableCell>
-
                 {
                     columnNames.map(columnName =>
                         <TableCell
@@ -114,19 +114,15 @@ const EnhancedTableToolbar = ({numSelected, classes, handleDelete}) =>
             {numSelected ? `${numSelected} Выбрано` : null}
         </Typography>
 
-        <Typography className={classes.title} variant="h6" id="tableTitle" component="div">
-            Здесь название таблицы
-        </Typography>
-        {
-            numSelected ?
-                <Tooltip title="Удалить выбранные элементы">
-                    <IconButton aria-label="delete" onClick={() => alert('deleted')}>
-                        <DeleteIcon/>
-                    </IconButton>
-                </Tooltip>
-                : null
-        }
-    </Toolbar>
+            {
+                numSelected ?
+                    <Tooltip title="Удалить выбранные элементы">
+                        <IconButton aria-label="delete" onClick={() => alert('deleted')}>
+                            <DeleteIcon/>
+                        </IconButton>
+                    </Tooltip>
+                    : null}
+        </Toolbar>
 
 
 EnhancedTableToolbar.propTypes = {
@@ -167,7 +163,7 @@ const useStyles = makeStyles((theme) => ({
  * @returns {*}
  * @constructor
  */
-const EnhancedTable = ({columnNames, rows, tableState, sort, change}) => {
+const EnhancedTable = ({columnNames, rows, tableState, sort, change, tableName}) => {
     const {order, orderBy, selected, page, rowsPerPage, dense} = tableState;
     const classes = useStyles();
 
@@ -199,7 +195,7 @@ const EnhancedTable = ({columnNames, rows, tableState, sort, change}) => {
                       spacing={5}>
                     <Grid item/>
                     <Grid item> <Typography variant="h6" id="tableTitle" component="div" align={"center"}>
-                        Здесь название таблицы
+                        {tableName}
                     </Typography>
                     </Grid>
 
@@ -223,7 +219,6 @@ const EnhancedTable = ({columnNames, rows, tableState, sort, change}) => {
                         />
                         <TableBody>
                             {
-
                                 rows.map((row, index) =>
                                     <TableRow
                                         hover
