@@ -1,31 +1,32 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import clsx from 'clsx';
 import {lighten, makeStyles} from '@material-ui/core/styles';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableContainer from '@material-ui/core/TableContainer';
-import TableHead from '@material-ui/core/TableHead';
-import TablePagination from '@material-ui/core/TablePagination';
-import TableRow from '@material-ui/core/TableRow';
-import TableSortLabel from '@material-ui/core/TableSortLabel';
-import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
-import Paper from '@material-ui/core/Paper';
-import Checkbox from '@material-ui/core/Checkbox';
-import IconButton from '@material-ui/core/IconButton';
-import Tooltip from '@material-ui/core/Tooltip';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Switch from '@material-ui/core/Switch';
+import {
+    Checkbox,
+    FormControlLabel,
+    IconButton,
+    Paper,
+    Switch,
+    Table,
+    TableBody,
+    TableCell,
+    TableContainer,
+    TableHead,
+    TablePagination,
+    TableRow,
+    TableSortLabel,
+    Toolbar,
+    Tooltip,
+    Typography,
+} from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/Delete';
-import FilterListIcon from '@material-ui/icons/FilterList';
-import Grid from "@material-ui/core/Grid";
-
+import {changeTableStateAction, sortRowsAction} from "../actions";
+import {connect} from "react-redux";
 
 /**
  * Сортирует массив строк
  * @param arr
+ * @param property
  * @param mode
  * @returns {this}
  */
@@ -35,11 +36,7 @@ const sortArrOfStrings = (arr = [], property, mode = 'ASC') =>
         [...arr].sort((cur, next) => `${next[property]}`.localeCompare(cur[property]))
 
 
-function EnhancedTableHead(props) {
-    const {classes, onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort, columnNames} = props;
-    const createSortHandler = (property) => (event) => {
-        onRequestSort(event, property);
-    };
+function EnhancedTableHead({classes, selectAll, order, orderBy, numSelected, rowCount, sort, columnNames}) {
 
     return (
         <TableHead>
@@ -47,32 +44,34 @@ function EnhancedTableHead(props) {
                 <TableCell padding="checkbox">
                     <Checkbox
                         indeterminate={numSelected > 0 && numSelected < rowCount}
-                        checked={rowCount > 0 && numSelected === rowCount}
-                        onChange={onSelectAllClick}
-                        inputProps={{'aria-label': 'select all desserts'}}
+                        checked={rowCount && numSelected === rowCount}
+                        onChange={selectAll}
                     />
                 </TableCell>
-                {columnNames.map((columnName) => (
-                    <TableCell
-                        key={columnName}
-                        align={'center'}
-                        padding={'default'}
-                        sortDirection={orderBy === columnName ? order : false}
-                    >
-                        <TableSortLabel
-                            active={orderBy === columnName}
-                            direction={orderBy === columnName ? order : 'asc'}
-                            onClick={createSortHandler(columnName)}
+                {
+                    columnNames.map(columnName =>
+                        <TableCell
+                            onClick={() => {
+                                sort(columnName, orderBy.toLowerCase() === 'asc' ? 'desc' : 'asc')
+                            }}
+                            key={columnName}
+                            align={'right'}
+                            padding={'default'}
+                            sortDirection={order === columnName ? orderBy : false}
                         >
-                            {columnName}
-                            {orderBy === columnName ? (
-                                <span className={classes.visuallyHidden}>
-                  {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
-                </span>
-                            ) : null}
-                        </TableSortLabel>
-                    </TableCell>
-                ))}
+                            <TableSortLabel
+                                active={order===columnName}
+                                direction={order === columnName ? orderBy : 'asc'}>
+                                {columnName}
+                                {
+                                    orderBy === columnName ?
+                                        <span className={classes.visuallyHidden}/>
+                                        : null
+                                }
+                            </TableSortLabel>
+                        </TableCell>
+                    )
+                }
             </TableRow>
         </TableHead>
     );
@@ -81,10 +80,10 @@ function EnhancedTableHead(props) {
 EnhancedTableHead.propTypes = {
     classes: PropTypes.object.isRequired,
     numSelected: PropTypes.number.isRequired,
-    onRequestSort: PropTypes.func.isRequired,
-    onSelectAllClick: PropTypes.func.isRequired,
-    order: PropTypes.oneOf(['asc', 'desc']).isRequired,
-    orderBy: PropTypes.string.isRequired,
+    sort: PropTypes.func.isRequired,
+    selectAll: PropTypes.func.isRequired,
+    orderBy: PropTypes.oneOf(['asc', 'desc']).isRequired,
+    order: PropTypes.string,
     rowCount: PropTypes.number.isRequired,
 };
 
@@ -108,12 +107,11 @@ const useToolbarStyles = makeStyles((theme) => ({
     },
 }));
 
-const EnhancedTableToolbar = ({numSelected, classes, handleDelete}) => {
-    return (
-        <Toolbar>
-            <Typography className={classes.title} color="inherit" variant="subtitle1" component="div">
-                {numSelected ? `${numSelected} Выбрано` : null}
-            </Typography>
+const EnhancedTableToolbar = ({numSelected, classes, handleDelete}) =>
+    <Toolbar>
+        <Typography className={classes.title} color="inherit" variant="subtitle1" component="div">
+            {numSelected ? `${numSelected} Выбрано` : null}
+        </Typography>
 
             {
                 numSelected ?
@@ -125,12 +123,8 @@ const EnhancedTableToolbar = ({numSelected, classes, handleDelete}) => {
                     : null}
         </Toolbar>
 
-    )
-        ;
-};
 
 EnhancedTableToolbar.propTypes = {
-    numSelected: PropTypes.number.isRequired,
     classes: PropTypes.object.isRequired,
 };
 
@@ -158,66 +152,37 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export const EnhancedTable = ({columnNames, rows}) => {
+/**
+ *
+ * @param columnNames
+ * @param rows
+ * @param order
+ * @param sort
+ * @param change
+ * @returns {*}
+ * @constructor
+ */
+const EnhancedTable = ({columnNames, rows, tableState, sort, change}) => {
+    const {order, orderBy, selected, page, rowsPerPage, dense} = tableState;
     const classes = useStyles();
-    const [order, setOrder] = React.useState('asc');
-    const [orderBy, setOrderBy] = React.useState(columnNames[0]);
-    const [selected, setSelected] = React.useState([]);
-    const [page, setPage] = React.useState(0);
-    const [dense, setDense] = React.useState(false);
-    const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
-    const handleRequestSort = (event, property) => {
-        const isAsc = orderBy === property && order === 'asc';
-        setOrder(isAsc ? 'desc' : 'asc');
-        setOrderBy(property);
+    const sortRows = (rows, property, mode) => {
+        sort(rows, property, mode);
+        change({...tableState, order: property, orderBy: mode})
+    }
+    const selectAll = () => {
+        selected.length !== rows.length ?
+            change({...tableState, selected: rows}) :
+            change({...tableState, selected: []})
     };
 
-    const handleSelectAll = (event) => {
-        if (event.target.checked) {
-            const newSelecteds = rows;
-            setSelected(newSelecteds);
-            return;
-        }
-        setSelected([]);
-    };
+    const selectRow = row => {
+        selected.find(sel => Object.entries(sel).toString() === Object.entries(row).toString()) ?
+            change({...tableState, selected: selected.filter(sel => sel !== row)}) :
+            change({...tableState, selected: [...selected, row]})
+    }
 
-    const handleClick = (event, name) => {
-        const selectedIndex = selected.indexOf(name);
-        let newSelected = [];
-
-        if (selectedIndex === -1) {
-            newSelected = newSelected.concat(selected, name);
-        } else if (selectedIndex === 0) {
-            newSelected = newSelected.concat(selected.slice(1));
-        } else if (selectedIndex === selected.length - 1) {
-            newSelected = newSelected.concat(selected.slice(0, -1));
-        } else if (selectedIndex > 0) {
-            newSelected = newSelected.concat(
-                selected.slice(0, selectedIndex),
-                selected.slice(selectedIndex + 1),
-            );
-        }
-
-        setSelected(newSelected);
-    };
-
-    const handleChangePage = (event, newPage) => {
-        setPage(newPage);
-    };
-
-    const handleChangeRowsPerPage = (event) => {
-        setRowsPerPage(parseInt(event.target.value, 10));
-        setPage(0);
-    };
-
-    const handleChangeDense = (event) => {
-        setDense(event.target.checked);
-    };
-
-    const isSelected = (name) => selected.indexOf(name) !== -1;
-
-    const emptyRows = rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
+    const isSelected = row => !!selected.find(sel => Object.entries(sel).toString() === Object.entries(row).toString());
 
     return (
         <div className={classes.root}>
@@ -247,59 +212,66 @@ export const EnhancedTable = ({columnNames, rows}) => {
                             numSelected={selected.length}
                             order={order}
                             orderBy={orderBy}
-                            onSelectAllClick={handleSelectAll}
-                            onRequestSort={handleRequestSort}
+                            selectAll={selectAll}
+                            sort={sortRows.bind(null, rows)}
                             rowCount={rows.length}
                         />
                         <TableBody>
                             {
-                                sortArrOfStrings(rows, orderBy, order).map((row, index) => {
-                                    const isItemSelected = isSelected(row);
-                                    const labelId = `enhanced-table-checkbox-${index}`;
-
-                                    return (
-                                        <TableRow
-                                            hover
-                                            onClick={(event) => handleClick(event, row)}
-                                            role="checkbox"
-                                            aria-checked={isItemSelected}
-                                            tabIndex={-1}
-                                            key={index}
-                                            selected={isItemSelected}
-                                        >
-                                            <TableCell padding="checkbox">
-                                                <Checkbox
-                                                    checked={isItemSelected}
-                                                    inputProps={{'aria-labelledby': labelId}}
-                                                />
-                                            </TableCell>
-                                            {
-                                                columnNames.map(columnName =>
-                                                    <TableCell align="center" key={columnName}>
-                                                        {row[columnName]}
-                                                    </TableCell>
-                                                )
-                                            }
-                                        </TableRow>
-                                    );
-                                })}
+                                rows.map((row, index) =>
+                                    <TableRow
+                                        hover
+                                        onClick={selectRow.bind(null, row)}
+                                        role="checkbox"
+                                        aria-checked={isSelected(row)}
+                                        tabIndex={-1}
+                                        key={index}
+                                        selected={isSelected(row)}
+                                    >
+                                        <TableCell padding="checkbox">
+                                            <Checkbox
+                                                checked={isSelected(row)}
+                                                inputProps={{'aria-labelledby': `enhanced-table-checkbox-${index}`}}
+                                            />
+                                        </TableCell>
+                                        {
+                                            columnNames.map(columnName =>
+                                                <TableCell align="right" key={columnName}>
+                                                    {row[columnName]}
+                                                </TableCell>
+                                            )
+                                        }
+                                    </TableRow>
+                                )}
                         </TableBody>
                     </Table>
                 </TableContainer>
                 <TablePagination
+                    onChangePage={()=>{}}
                     rowsPerPageOptions={[5, 10, 25]}
                     component="div"
                     count={rows.length}
                     rowsPerPage={rowsPerPage}
                     page={page}
-                    onChangePage={handleChangePage}
-                    onChangeRowsPerPage={handleChangeRowsPerPage}
                 />
             </Paper>
             <FormControlLabel
-                control={<Switch checked={dense} onChange={handleChangeDense}/>}
+                control={<Switch checked={dense}/>}
                 label="Сокращённый вариант таблицы"
             />
         </div>
     );
-}
+};
+
+const mapStateToProps = state => ({
+    rows: state.table.rows,
+    tableState: state.table.tableState
+});
+
+const mapDispatchToProps = dispatch => ({
+    sort: (array, property, mode) => dispatch(sortRowsAction(sortArrOfStrings(array, property, mode))),
+    change: (newState) => dispatch(changeTableStateAction(newState)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(EnhancedTable);
+
