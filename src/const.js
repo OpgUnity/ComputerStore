@@ -55,7 +55,7 @@ export const handleCreate = (item,pathname) =>
         .then(res => {
             if (res.success) {
                 window.store.dispatch(putAction(res))
-                handleRead()
+                handleRead(pathname)
             } else {
                 return Promise.reject('error due server request')
             }
@@ -72,7 +72,7 @@ export const handleUpdate = (value,pathname) =>
         .then(res => res.json())
         .then(res =>
             res.success ?
-                handleRead() :
+                handleRead(pathname) :
                 Promise.reject('error due server request'))
         .catch(err => alert(err))
 
@@ -83,8 +83,8 @@ export const handleDelete = (id,pathname) =>
         .then(res => res.json())
         .then(res => {
             if (res.success) {
-                window.store.dispatch(deleteAction(res))
-                handleRead()
+                window.store.dispatch(deleteAction(res));
+                handleRead(pathname)
             } else {
                 return Promise.reject('error due server request')
             }

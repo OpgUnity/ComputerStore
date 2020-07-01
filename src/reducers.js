@@ -13,6 +13,7 @@ import {
 const initialData ={
     tableState: {
         order: null,
+        rowsPerPageOptions: [5, 10, 25],
         orderBy: 'asc',
         selected: [],
         page: 0,
