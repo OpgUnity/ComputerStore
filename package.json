@@ -34,7 +34,8 @@
   },
   "devDependencies": {
     "body-parser": "^1.19.0",
-    "nodemon": "^1.11.0"
+    "nodemon": "^1.11.0",
+    "prop-types": "latest"
   },
   "browserslist": {
     "production": [

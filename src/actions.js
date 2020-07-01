@@ -5,6 +5,8 @@ export const DELETE_ACTION = "DELETE_ACTION";
 export const START_EIDT = "START_EIDT";
 export const END_EDIT = "END_EDIT";
 export const LOGIN = "LOGIN";
+export const SORT_ROWS = "SORT_ROWS";
+export const CHANGE_TABLE_STATE = "CHANGE_TABLE_STATE"
 
 export const getAction = ({rows, fields}) => ({
     type: GET_ACTION,
@@ -13,6 +15,17 @@ export const getAction = ({rows, fields}) => ({
         fields,
     }
 })
+
+export const changeTableStateAction = payload => ({
+    type: CHANGE_TABLE_STATE,
+    payload,
+})
+
+export const sortRowsAction = payload => ({
+    type: SORT_ROWS,
+    payload
+});
+
 export const postAction = payload => ({
     type: POST_ACTION,
     payload: payload
