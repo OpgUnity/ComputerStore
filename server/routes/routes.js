@@ -12,7 +12,6 @@ module.exports = function (app) {
     let ordersController = require('../controllers/ordersController');
     let warehouseController = require('../controllers/warehouseController');
     let salesProductsController = require('../controllers/salesProductsController');
-    let productCategoryController = require('../controllers/productCategoryController');
     let productsController = require('../controllers/productsController');
     let manufacturersController = require('../controllers/manufacturersController');
     app.route('/login')
