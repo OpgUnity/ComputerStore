@@ -9,22 +9,23 @@ import {
     WAREHOUSE_PATHNAME
 } from "../const";
 import {ThemeProvider} from "@material-ui/styles";
+import {browserHistory, IndexRoute, Link, Router} from "react-router";
+import Route from "react-router/lib/Route";
 
-export const tables = [{tableName: "conditions", pathName: CONDITION_PATHNAME},
-    {tableName: "manufacturies", pathName: MANUFACTURERS_PATHNAME},
-    {tableName: "order_states", pathName: ORDER_STATES_PATHNAME},
-    {tableName: "orders", pathName: ORDERS_PATHNAME},
-    {tableName: "product_category", pathName: PRODUCT_CATEGORY_PATHNAME},
-    {tableName: "products", pathName: PRODUCTS_PATHNAME},
-    {tableName: "sales", pathName: SALES_PATHNAME},
-    {tableName: "sales_products", pathName: SALES_PRODUCTS_PATHNAME},
-    {tableName: "warehouse", pathName: WAREHOUSE_PATHNAME}
 
-]
 
 export const PrintTable = (props) =>
+
     <>
         {props.table.map(function (curentTable, index) {
-            return <Button variant="contained" style={{display: "block", margin: "2em"}} onClick={ () => (curentTable.pathName)}> {curentTable.tableName} </Button>
+
+            return (
+                <Link to={curentTable.pathName}>
+                    <Button variant="contained" style={{
+                        display: "block",
+                        margin: "2em"
+                    }}> {curentTable.tableName} </Button>
+                </Link>)
         })}
+
     </>
