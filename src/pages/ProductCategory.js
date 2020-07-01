@@ -11,6 +11,7 @@ const ProductCategory = ({columns, rows}) =>
 
     </>
 
+
 const mapStateToProps = (state) => ({
     columns: state.table.fields,
     rows: state.table.rows

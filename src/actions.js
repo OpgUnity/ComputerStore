@@ -6,7 +6,8 @@ export const START_EIDT = "START_EIDT";
 export const END_EDIT = "END_EDIT";
 export const LOGIN = "LOGIN";
 export const SORT_ROWS = "SORT_ROWS";
-export const CHANGE_TABLE_STATE = "CHANGE_TABLE_STATE"
+export const CHANGE_TABLE_STATE = "CHANGE_TABLE_STATE";
+export const INIT_TABLE = "INIT_TABLE";
 
 export const getAction = ({rows, fields}) => ({
     type: GET_ACTION,
@@ -14,6 +15,10 @@ export const getAction = ({rows, fields}) => ({
         rows,
         fields,
     }
+})
+
+export const initAction = ()=> ({
+    type: INIT_TABLE
 })
 
 export const changeTableStateAction = payload => ({

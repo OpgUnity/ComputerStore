@@ -22,6 +22,7 @@ import {
 import DeleteIcon from '@material-ui/icons/Delete';
 import {changeTableStateAction, sortRowsAction} from "../actions";
 import {connect} from "react-redux";
+import Grid from "@material-ui/core/Grid";
 
 /**
  * Сортирует массив строк
@@ -162,7 +163,7 @@ const useStyles = makeStyles((theme) => ({
  * @returns {*}
  * @constructor
  */
-const EnhancedTable = ({columnNames, rows, tableState, sort, change}) => {
+const EnhancedTable = ({columnNames, rows, tableState, sort, change, tableName}) => {
     const {order, orderBy, selected, page, rowsPerPage, dense} = tableState;
     const classes = useStyles();
 
@@ -194,7 +195,7 @@ const EnhancedTable = ({columnNames, rows, tableState, sort, change}) => {
                       spacing={5}>
                     <Grid item/>
                     <Grid item> <Typography variant="h6" id="tableTitle" component="div" align={"center"}>
-                        Здесь название таблицы
+                        {tableName}
                     </Typography>
                     </Grid>
 

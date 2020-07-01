@@ -12,7 +12,6 @@ export const PRODUCTS_PATHNAME='/products';
 export const MANUFACTURERS_PATHNAME='/manufacturers';
 export const SALES_PRODUCTS_PATHNAME='/sales_products';
 
-
 export const tables = [
     {tableName: "Состояние товаров", pathName: CONDITION_PATHNAME},
     {tableName: "Производители", pathName: MANUFACTURERS_PATHNAME},
@@ -28,7 +27,6 @@ export const tables = [
 
 
 export const handleRead = (pathname) =>
-{
     fetch(`${SERVER}${pathname}`)
         .then(res => res.json())
         .then(res =>
@@ -40,10 +38,9 @@ export const handleRead = (pathname) =>
                 Promise.reject('error due server request')
         )
         .catch(err => alert(err))
-}
 
 
-export const handleCreate = (item,pathname) => {
+export const handleCreate = (item,pathname) =>
     fetch(`${SERVER}${pathname}`,
         {
             method: 'PUT',
@@ -61,9 +58,9 @@ export const handleCreate = (item,pathname) => {
             }
         })
         .catch(err => alert(err))
-}
 
-export const handleUpdate = (value,pathname) => {
+
+export const handleUpdate = (value,pathname) =>
     fetch(`${SERVER}${pathname}`, {
         method: 'POST',
         headers: {'Content-Type': 'application/json',},
@@ -75,8 +72,8 @@ export const handleUpdate = (value,pathname) => {
                 handleRead() :
                 Promise.reject('error due server request'))
         .catch(err => alert(err))
-}
-export const handleDelete = (id,pathname) => {
+
+export const handleDelete = (id,pathname) =>
     fetch(`${SERVER}${pathname}/${id}`,
         {method: 'delete'}
     )
@@ -90,9 +87,9 @@ export const handleDelete = (id,pathname) => {
             }
         })
         .catch(err => alert(err))
-}
 
-export const handleLogin = (userData,pathname) => {
+
+export const handleLogin = (userData,pathname) =>
     fetch(`${SERVER}${pathname}`,
         {
             method: 'POST',
@@ -104,4 +101,3 @@ export const handleLogin = (userData,pathname) => {
             window.store.dispatch(login(res.body))
         )
         .catch(err => alert(err))
-}

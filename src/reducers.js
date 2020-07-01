@@ -2,7 +2,7 @@ import {
     CHANGE_TABLE_STATE,
     DELETE_ACTION,
     END_EDIT,
-    GET_ACTION,
+    GET_ACTION, INIT_TABLE,
     LOGIN,
     POST_ACTION,
     PUT_ACTION,
@@ -19,14 +19,19 @@ const initialData ={
         rowsPerPage: 5,
         dense: false
     },
-    rows: null,
-    rowNames: null,
+    rows: [],
+    rowNames: [],
     edit: false,
     logged: false
 };
 
 export const tableReducer = (state = initialData, action) => {
     switch (action.type) {
+        case INIT_TABLE: {
+            return {
+                ...initialData
+            }
+        }
         case SORT_ROWS: {
             return {
                 ...state,
