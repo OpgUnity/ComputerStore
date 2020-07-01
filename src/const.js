@@ -1,4 +1,7 @@
 import {deleteAction, getAction, login, putAction} from "./actions";
+import {FormCondition} from "./pages/ConditionPage";
+import {FormManufacturers} from "./pages/ManucacturersPage";
+
 
 export const SERVER = 'http://localhost:3002';
 export const CONDITION_PATHNAME = '/conditions';
@@ -14,10 +17,10 @@ export const SALES_PRODUCTS_PATHNAME='/sales_products'
 
 
 export const tables = [
-    {tableName: "Состояние товаров", pathName: CONDITION_PATHNAME},
-    {tableName: "Производители", pathName: MANUFACTURERS_PATHNAME},
+    {tableName: "Состояние товаров", pathName: CONDITION_PATHNAME, form: FormCondition},
+    {tableName: "Производители", pathName: MANUFACTURERS_PATHNAME, form: FormManufacturers},
     {tableName: "Состояние заказа", pathName: ORDER_STATES_PATHNAME},
-    {tableName: "Заказы", pathName: ORDERS_PATHNAME},
+    {tableName: "Заказы", pathName: ORDERS_PATHNAME, form: FormCondition},
     {tableName: "Категория продукта", pathName: PRODUCT_CATEGORY_PATHNAME},
     {tableName: "Продукты", pathName: PRODUCTS_PATHNAME},
     {tableName: "Продажи", pathName: SALES_PATHNAME},
