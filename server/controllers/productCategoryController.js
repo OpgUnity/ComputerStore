@@ -15,7 +15,6 @@ exports.get = async (req, res) =>
     query(selectQueryText)
         .then(results => {
             //2.при успешной отработке в этом блоке берём данные
-
             var response = {
                 success: true,
                 body: {
