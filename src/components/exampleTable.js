@@ -48,6 +48,7 @@ function EnhancedTableHead({classes, selectAll, order, orderBy, numSelected, row
                         onChange={selectAll}
                     />
                 </TableCell>
+
                 {
                     columnNames.map(columnName =>
                         <TableCell
@@ -191,6 +192,18 @@ const EnhancedTable = ({columnNames, rows, tableState, sort, change}) => {
     return (
         <div className={classes.root}>
             <Paper className={classes.paper}>
+                <Grid container
+                      direction="column"
+                      justify="space-around"
+                      alignItems="center"
+                      spacing={5}>
+                    <Grid item/>
+                    <Grid item> <Typography variant="h6" id="tableTitle" component="div" align={"center"}>
+                        Здесь название таблицы
+                    </Typography>
+                    </Grid>
+
+                </Grid>
                 <EnhancedTableToolbar numSelected={selected.length} classes={useToolbarStyles()}/>
                 <TableContainer>
                     <Table
@@ -210,6 +223,7 @@ const EnhancedTable = ({columnNames, rows, tableState, sort, change}) => {
                         />
                         <TableBody>
                             {
+
                                 rows.map((row, index) =>
                                     <TableRow
                                         hover

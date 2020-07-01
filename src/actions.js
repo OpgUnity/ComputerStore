@@ -8,11 +8,11 @@ export const LOGIN = "LOGIN";
 export const SORT_ROWS = "SORT_ROWS";
 export const CHANGE_TABLE_STATE = "CHANGE_TABLE_STATE"
 
-export const getAction = ({rows, rowNames}) => ({
+export const getAction = ({rows, fields}) => ({
     type: GET_ACTION,
     payload: {
         rows,
-        rowNames,
+        fields,
     }
 })
 

@@ -13,6 +13,17 @@ exports.bodyNormalizator = body => ({
 })
 
 
+exports.responseBuilder = (results, success) => ({
+
+    success: success,
+    body: {
+        rows: results && results.rows,
+        fields: results && results.fields.map(item => item.name)
+    }
+
+})
+
+
 //Виды сортировки
 exports.ASC = "ASC";
 exports.DESC = "DESC";

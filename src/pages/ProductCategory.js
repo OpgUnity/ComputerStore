@@ -1,19 +1,26 @@
 import React from 'react';
 import {connect} from "react-redux";
+
 import {Button} from "@material-ui/core";
 import {handleRead, PRODUCTS_PATHNAME} from "../const";
 import EnhancedTable from "../components/exampleTable";
 
+
+
 const ProductCategory = ({columns, rows}) =>
     <>
+
         {rows && <EnhancedTable columnNames={columns} rows={rows}/>}
         <Button variant="contained" onClick={() => handleRead(PRODUCTS_PATHNAME)}>Default</Button>
-
     </>
 
 const mapStateToProps = (state) => ({
-    columns: state.table.rowNames,
+    columns: state.table.fields,
     rows: state.table.rows
 })
 
+export const UniversalTableComponent = (props) => {
+
+    return <div> {tables.find(tableInfo => tableInfo.pathName === props.location.pathname).tableName} </div>
+}
 export default connect(mapStateToProps, null)(ProductCategory);

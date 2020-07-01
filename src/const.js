@@ -13,6 +13,18 @@ export const MANUFACTURERS_PATHNAME='/manufacturers';
 export const SALES_PRODUCTS_PATHNAME='/sales_products';
 
 
+export const tables = [
+    {tableName: "Состояние товаров", pathName: CONDITION_PATHNAME},
+    {tableName: "Производители", pathName: MANUFACTURERS_PATHNAME},
+    {tableName: "Состояние заказа", pathName: ORDER_STATES_PATHNAME},
+    {tableName: "Заказы", pathName: ORDERS_PATHNAME},
+    {tableName: "Категория продукта", pathName: PRODUCT_CATEGORY_PATHNAME},
+    {tableName: "Продукты", pathName: PRODUCTS_PATHNAME},
+    {tableName: "Продажи", pathName: SALES_PATHNAME},
+    {tableName: "Проданные продукты", pathName: SALES_PRODUCTS_PATHNAME},
+    {tableName: "Склад", pathName: WAREHOUSE_PATHNAME}
+]
+
 
 
 export const handleRead = (pathname) =>
@@ -23,7 +35,7 @@ export const handleRead = (pathname) =>
             res.success ?
                 window.store.dispatch(getAction({
                     rows: res.body.rows,
-                    rowNames: res.body.rowNames,
+                    fields: res.body.fields,
                 })) :
                 Promise.reject('error due server request')
         )

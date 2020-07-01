@@ -3,13 +3,14 @@ import './App.css';
 import Button from "./components/Button";
 import {endEdit} from "./actions";
 import {connect} from "react-redux";
-import {handleCreate, handleLogin, handleRead, handleUpdate} from "./const";
+import {handleCreate, handleLogin, handleRead, handleUpdate, tables} from "./const";
 import AddForm from "./components/AddForm";
 import LoginForm from "./components/LoginForm";
 import EditForm from "./components/EditForm";
 import States from "./pages/states";
 import ProductCategory from "./pages/ProductCategory";
-
+import Container from '@material-ui/core/Container';
+import {PrintTable} from "./components/SelectTable";
 
 export const App = ({rows, rowNames, edit, rowData, closeForm, logged, reason}) => {
     const handleSubmit = values => {
@@ -17,7 +18,7 @@ export const App = ({rows, rowNames, edit, rowData, closeForm, logged, reason}) 
         handleUpdate(values)
     }
     return (
-        <div>
+        <Container maxWidth="md">
             {
                 // !logged ?
                 //     <>
@@ -42,11 +43,11 @@ export const App = ({rows, rowNames, edit, rowData, closeForm, logged, reason}) 
                 //     </>
 
             }
-            <ProductCategory/>
+            <PrintTable table={tables} />
 
 
 
-        </div>
+        </Container>
     )
 }
 
