@@ -4,6 +4,7 @@ import './index.css';
 import './styles/style.scss'
 import * as serviceWorker from './serviceWorker';
 import {Provider} from "react-redux";
+import {createMuiTheme, ThemeProvider} from '@material-ui/core'
 import store from "./store";
 import {tables} from "./components/SelectTable";
 import Router from "./Router";
@@ -11,7 +12,9 @@ import Router from "./Router";
 window.store = store;
 ReactDOM.render(
     <Provider store={store}>
-        <Router/>
+        <ThemeProvider theme={createMuiTheme()}>
+            <Router/>
+        </ThemeProvider>
     </Provider>,
 
     document.getElementById('root')

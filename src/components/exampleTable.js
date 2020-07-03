@@ -19,6 +19,7 @@ import {
     Tooltip,
     Typography,
 } from '@material-ui/core';
+import PlaylistAddTwoToneIcon from '@material-ui/icons/PlaylistAddTwoTone';
 import DeleteIcon from '@material-ui/icons/Delete';
 import {changeTableStateAction, sortRowsAction} from "../actions";
 import {connect} from "react-redux";
@@ -44,7 +45,7 @@ const sortArr = (arr = [], property, mode = 'ASC') =>
             mode.toLowerCase() === 'asc' ?
                 [...arr].sort((cur, next) => cur[property] - next[property]) :
                 [...arr].sort((cur, next) => next[property] - cur[property])
-        ) : new Error('incorrect argument type')
+        ) : new Error('incorrect array element type')
     )
 
 
@@ -126,17 +127,19 @@ const useToolbarStyles = makeStyles((theme) => ({
     },
 }));
 
-const EnhancedTableToolbar = ({numSelected, classes, handleDelete}) =>
+const EnhancedTableToolbar = ({numSelected, classes, handleDelete, tableState, dense, change, handleEdit, handleCreate}) =>
     <Toolbar>
         <Typography className={classes.title} color="inherit" variant="subtitle1" component="div">
             {numSelected ? `${numSelected} Выбрано` : null}
         </Typography>
-        {numSelected === 1 &&
-        <Tooltip title="Редактировать выбраннный элемент">
-            <IconButton aria-label="delete" onClick={() => alert('deleted')}>
-                <EditTwoTone/>
-            </IconButton>
-        </Tooltip>}
+        {
+            numSelected === 1 &&
+            <Tooltip title="Редактировать выбраннный элемент">
+                <IconButton onClick={handleEdit}>
+                    <EditTwoTone/>
+                </IconButton>
+            </Tooltip>
+        }
         {
             numSelected ?
                 <Tooltip title="Удалить выбранные элементы">
@@ -144,7 +147,15 @@ const EnhancedTableToolbar = ({numSelected, classes, handleDelete}) =>
                         <DeleteIcon/>
                     </IconButton>
                 </Tooltip>
-                : null}
+                : null
+        }
+
+        <Tooltip title={"Добавить запись"}>
+            <PlaylistAddTwoToneIcon onClick={handleCreate}/>
+        </Tooltip>
+        <Tooltip title={"Компактный вид таблицы"}>
+            <Switch checked={dense} onChange={() => change({...tableState, dense: !dense})}/>
+        </Tooltip>
     </Toolbar>
 
 
@@ -186,7 +197,7 @@ const useStyles = makeStyles((theme) => ({
  * @returns {*}
  * @constructor
  */
-const EnhancedTable = ({columnNames, rows, tableState, sort, change, currentTable}) => {
+const EnhancedTable = ({columnNames, rows, tableState, sort, change, currentTable, handleEdit, handleCreate}) => {
     const {order, orderBy, selected, page, rowsPerPage, dense, rowsPerPageOptions} = tableState;
     const classes = useStyles();
 
@@ -225,6 +236,11 @@ const EnhancedTable = ({columnNames, rows, tableState, sort, change, currentTabl
                 <EnhancedTableToolbar numSelected={selected.length}
                                       classes={useToolbarStyles()}
                                       handleDelete={deleteRows.bind(null, selected)}
+                                      dense={dense}
+                                      tableState={tableState}
+                                      change={change}
+                                      handleEdit={handleEdit}
+                                      handleCreate={handleCreate}
                 />
                 <TableContainer>
                     <Table className={classes.table} aria-labelledby="tableTitle" size={dense ? 'small' : 'medium'}>
@@ -239,8 +255,7 @@ const EnhancedTable = ({columnNames, rows, tableState, sort, change, currentTabl
                             rowCount={rows.length}
                         />
                         <TableBody>
-                            {rows
-                                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                            {rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                                 .map((row, index) =>
                                     <TableRow hover
                                               onClick={selectRow.bind(null, row)}
@@ -275,10 +290,6 @@ const EnhancedTable = ({columnNames, rows, tableState, sort, change, currentTabl
                                   rowsPerPageOptions={rowsPerPageOptions}
                 />
             </Paper>
-            <FormControlLabel
-                control={<Switch checked={dense} onChange={() => change({...tableState, dense: !dense})}/>}
-                label="Сокращённый вариант таблицы"
-            />
         </div>
     );
 };

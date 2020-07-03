@@ -4,7 +4,6 @@ import App from "./App";
 import UniversalTableComponent from "./components/SelectTable";
 import {initAction} from "./actions";
 import {connect} from "react-redux";
-import {FormCondition} from "./pages/ConditionPage";
 
 const Wrapper = (props) => <div>{props.children}</div>
 
@@ -13,7 +12,7 @@ const RouterComponent = ({initTable}) => {
         <>
             <Router history={browserHistory} onUpdate={initTable}>
                 <Route path={"/"} component={Wrapper}>
-                    <IndexRoute component={FormCondition}/>
+                    <IndexRoute component={App}/>
                     <Route path={"/conditions"} component={UniversalTableComponent}/>
                     <Route path={"/manufacturers"} component={UniversalTableComponent}/>
                     <Route path={"/order_states"} component={UniversalTableComponent}/>

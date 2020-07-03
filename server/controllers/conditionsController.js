@@ -45,7 +45,7 @@ exports.get = async (req, res) =>
         });
 
 exports.put = async (req, res) =>
-    query(insertQueryText, bodyNormalizator(req.body))
+    query(insertQueryText, req.body)
         .then(results => {
             //3.Отправляем их клиенту в формате .json
             res.json(responseBuilder(results, true));
